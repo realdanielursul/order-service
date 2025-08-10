@@ -1,0 +1,24 @@
+app:
+  name: order-service
+  version: 1.0.0
+
+http:
+  port: 8080
+
+postgres:
+  host: postgres
+  port: 5432
+  username: postgres
+  password: postgres
+  database: order
+  ssl_mode: disable
+
+redis:
+  host: redis
+  port: 6379
+  password: ""
+  db: 0
+
+kafka:
+  host: kafka
+  port: 9092
