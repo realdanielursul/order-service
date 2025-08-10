@@ -1,11 +1,13 @@
 package kafka
 
-import "github.com/segmentio/kafka-go"
+import (
+	"github.com/realdanielursul/order-service/config"
+	"github.com/segmentio/kafka-go"
+)
 
-func NewKafkaReader(broker, topic, groupID string) *kafka.Reader {
+func NewKafkaReader(cfg config.Kafka) *kafka.Reader {
 	return kafka.NewReader(kafka.ReaderConfig{
-		Brokers: []string{broker},
-		Topic:   topic,
-		GroupID: groupID,
+		Brokers: []string{cfg.Host + cfg.Port},
+		Topic:   cfg.Topic,
 	})
 }

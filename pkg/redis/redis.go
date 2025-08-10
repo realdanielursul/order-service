@@ -3,21 +3,21 @@ package redis
 import (
 	"context"
 
+	"github.com/realdanielursul/order-service/config"
 	"github.com/redis/go-redis/v9"
-	"github.com/sirupsen/logrus"
 )
 
-func NewRedisClient(addr, password string, db int) *redis.Client {
+func NewRedisClient(cfg config.Redis) (*redis.Client, error) {
 	client := redis.NewClient(&redis.Options{
-		Addr:     addr,
-		Password: password,
-		DB:       db,
+		Addr:     cfg.Host + cfg.Port,
+		Password: cfg.Password,
+		DB:       cfg.DB,
 	})
 
 	_, err := client.Ping(context.Background()).Result()
 	if err != nil {
-		logrus.Fatalf("redis connection failed: %v", err)
+		return nil, err
 	}
 
-	return client
+	return client, nil
 }

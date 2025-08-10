@@ -22,3 +22,4 @@ redis:
 kafka:
   host: kafka
   port: 9092
+  topic: "orders"
