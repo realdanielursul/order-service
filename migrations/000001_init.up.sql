@@ -1,4 +1,4 @@
-CREATE TABLE orders (
+CREATE TABLE IF NOT EXISTS orders (
     order_uid TEXT PRIMARY KEY,
     track_number TEXT,
     entry TEXT,
@@ -12,7 +12,7 @@ CREATE TABLE orders (
     oof_shard TEXT
 );
 
-CREATE TABLE delivery (
+CREATE TABLE IF NOT EXISTS delivery (
     order_uid TEXT REFERENCES orders(order_uid),
     name TEXT,
     phone TEXT,
@@ -23,7 +23,7 @@ CREATE TABLE delivery (
     email TEXT
 );
 
-CREATE TABLE payment (
+CREATE TABLE IF NOT EXISTS payment (
     transaction TEXT PRIMARY KEY,
     order_uid TEXT REFERENCES orders(order_uid),
     request_id TEXT,
@@ -37,7 +37,7 @@ CREATE TABLE payment (
     custom_fee INT
 );
 
-CREATE TABLE items (
+CREATE TABLE IF NOT EXISTS items (
     id SERIAL PRIMARY KEY,
     order_uid TEXT REFERENCES orders(order_uid),
     chrt_id INT,

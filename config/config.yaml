@@ -10,7 +10,7 @@ postgres:
   port: 5432
   username: postgres
   password: postgres
-  database: order
+  database: orders
   ssl_mode: disable
 
 redis:
