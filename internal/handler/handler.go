@@ -19,6 +19,8 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 
+	router.StaticFile("/", "./web/index.html")
+
 	router.GET("/order/:order_uid", func(c *gin.Context) {
 		orderUID := c.Param("order_uid")
 		if orderUID == "" {

@@ -28,7 +28,7 @@ func (r *Repository) CreateOrder(ctx context.Context, order *entity.Order) error
 	}
 	defer tx.Rollback()
 
-	sql := `INSERT INTO orders (order_uid, track_number, entry, locale, internal_signature, customer_id, delivery_service, shardkey, sm_id, data_created, oof_shard) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`
+	sql := `INSERT INTO orders (order_uid, track_number, entry, locale, internal_signature, customer_id, delivery_service, shardkey, sm_id, date_created, oof_shard) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`
 	_, err = tx.ExecContext(ctx, sql, order.OrderUID, order.TrackNumber, order.Entry, order.Locale, order.InternalSignature, order.CustomerID, order.DeliveryService, order.ShardKey, order.SmID, order.DateCreated, order.OofShard)
 	if err != nil {
 		return err
@@ -48,7 +48,7 @@ func (r *Repository) CreateOrder(ctx context.Context, order *entity.Order) error
 
 	for _, item := range order.Items {
 		sql = `INSERT INTO items (order_uid, chrt_id, track_number, price, rid, name, sale, size, total_price, nm_id, brand, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`
-		_, err = tx.ExecContext(ctx, sql, order.OrderUID, item.ChrtID, item.TrackNumber, item.Price, item.RID, item.Name, item.Sale, item.Sale, item.Size, item.TotalPrice, item.NMID, item.Brand, item.Status)
+		_, err = tx.ExecContext(ctx, sql, order.OrderUID, item.ChrtID, item.TrackNumber, item.Price, item.RID, item.Name, item.Sale, item.Size, item.TotalPrice, item.NMID, item.Brand, item.Status)
 		if err != nil {
 			return err
 		}

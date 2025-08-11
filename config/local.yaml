@@ -6,7 +6,7 @@ http:
   port: 8080
 
 postgres:
-  host: postgres
+  host: localhost
   port: 5432
   username: postgres
   password: postgres
@@ -14,12 +14,12 @@ postgres:
   ssl_mode: disable
 
 redis:
-  host: redis
-  port: 6379
+  host: localhost
+  port: 6380
   password: ""
   db: 0
 
 kafka:
-  host: kafka
+  host: localhost
   port: 9092
-  topic: "orders"
+  topic: orders

@@ -27,7 +27,7 @@ func main() {
 	logger.SetLogrus()
 
 	// Configure app
-	cfg, err := config.NewConfig("./config/config.yaml")
+	cfg, err := config.NewConfig("./config/local.yaml")
 	if err != nil {
 		logrus.Fatalf("error initializing config: %s", err.Error())
 	}

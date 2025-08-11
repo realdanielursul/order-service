@@ -1,0 +1,24 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Order Lookup</title>
+</head>
+<body>
+  <h1>Поиск заказа</h1>
+  <input type="text" id="orderId" placeholder="Введите Order UID">
+  <button onclick="getOrder()">Найти</button>
+
+  <pre id="result"></pre>
+
+  <script>
+    async function getOrder() {
+      const id = document.getElementById('orderId').value;
+      const response = await fetch(`http://localhost:8080/order/${id}`);
+      const data = await response.json();
+      document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+    }
+  </script>
+</body>
+</html>

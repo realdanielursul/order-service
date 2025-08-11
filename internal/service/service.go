@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 
 	"github.com/realdanielursul/order-service/internal/cache"
 	"github.com/realdanielursul/order-service/internal/entity"
@@ -25,6 +26,7 @@ func (s *Service) GetOrder(ctx context.Context, orderUID string) (*entity.Order,
 	if err == nil && data != nil {
 		var order entity.Order
 		if err := json.Unmarshal(data, &order); err == nil {
+			log.Println("GOT DATA FROM CACHE")
 			return &order, err
 		}
 	}
@@ -44,9 +46,10 @@ func (s *Service) GetOrder(ctx context.Context, orderUID string) (*entity.Order,
 
 func (s *Service) CreateOrder(ctx context.Context, order *entity.Order) error {
 	cacheKey := fmt.Sprintf("order:%s", order.OrderUID)
+	log.Println(cacheKey)
 	data, err := json.Marshal(order)
 	if err == nil {
-		s.cache.SetData(ctx, cacheKey, data)
+		log.Println(s.cache.SetData(ctx, cacheKey, data))
 	}
 
 	return s.repository.CreateOrder(ctx, order)

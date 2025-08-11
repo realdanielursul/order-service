@@ -7,7 +7,7 @@ import (
 
 func NewKafkaReader(cfg config.Kafka) *kafka.Reader {
 	return kafka.NewReader(kafka.ReaderConfig{
-		Brokers: []string{cfg.Host + cfg.Port},
+		Brokers: []string{cfg.Host + ":" + cfg.Port},
 		Topic:   cfg.Topic,
 	})
 }
