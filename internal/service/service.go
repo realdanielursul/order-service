@@ -9,6 +9,7 @@ import (
 	"github.com/realdanielursul/order-service/internal/entity"
 	"github.com/realdanielursul/order-service/internal/repository"
 	"github.com/redis/go-redis/v9"
+	"github.com/sirupsen/logrus"
 )
 
 type Service struct {
@@ -24,13 +25,13 @@ func (s *Service) GetOrder(ctx context.Context, orderUID string) (*entity.Order,
 	// try to fetch data from cache
 	data, err := s.cache.GetData(ctx, orderUID)
 	if err != nil && err != redis.Nil {
-		return nil, err
+		return nil, fmt.Errorf("get from cache: %w", err)
 	}
 
 	if data != nil {
 		var order entity.Order
 		if err := json.Unmarshal(data, &order); err != nil {
-			return nil, err
+			return nil, fmt.Errorf("unmarshal cached order: %w", err)
 		}
 
 		return &order, err
@@ -39,7 +40,7 @@ func (s *Service) GetOrder(ctx context.Context, orderUID string) (*entity.Order,
 	// get data from database
 	order, err := s.repository.GetOrder(ctx, orderUID)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("get from repository: %w", err)
 	}
 
 	if order == nil {
@@ -49,11 +50,11 @@ func (s *Service) GetOrder(ctx context.Context, orderUID string) (*entity.Order,
 	// set new data to cache
 	data, err = json.Marshal(order)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("marshal new order: %w", err)
 	}
 
 	if err := s.cache.SetData(ctx, orderUID, data); err != nil {
-		return nil, err
+		logrus.Warn("failed to cache order %q: %v", orderUID, err)
 	}
 
 	return order, nil
@@ -61,18 +62,24 @@ func (s *Service) GetOrder(ctx context.Context, orderUID string) (*entity.Order,
 
 func (s *Service) CreateOrder(ctx context.Context, order *entity.Order) error {
 	// validate data
-	// дисклеймер: не до конца понимаю, что значат поля структуры Order,
+
+	// дисклеймер: не до конца понимаю, что означают все поля структуры
+	// Order, следовательно не могу провалидировать входные данные,
 	// поэтому будем считать, что здесь происходит **DATA VALIDATION**
 
 	// save new data to database
 	if err := s.repository.CreateOrder(ctx, order); err != nil {
-		return err
+		return fmt.Errorf("create order in repository: %w", err)
 	}
 
 	// set new data to cache
 	data, err := json.Marshal(order)
-	if err == nil {
-		return s.cache.SetData(ctx, order.OrderUID, data)
+	if err != nil {
+		return fmt.Errorf("marshal new order: %w", err)
+	}
+
+	if err := s.cache.SetData(ctx, order.OrderUID, data); err != nil {
+		logrus.Warn("failed to cache order %q: %v", order.OrderUID, err)
 	}
 
 	return nil

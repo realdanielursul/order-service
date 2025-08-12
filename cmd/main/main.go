@@ -22,6 +22,11 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// ПОДГРУЖАТЬ КЕШ ПОСЛЕ ПЕРЕЗАГРУЗКИ
+// ADD TTL TO CACHE STRUCT
+// CLEAR CODE
+//
+
 func main() {
 	// Set up logger
 	logger.SetLogrus()
