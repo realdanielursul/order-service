@@ -23,16 +23,13 @@ import (
 )
 
 // ПОДГРУЖАТЬ КЕШ ПОСЛЕ ПЕРЕЗАГРУЗКИ
-// ADD TTL TO CACHE STRUCT
-// CLEAR CODE
-//
 
 func main() {
 	// Set up logger
 	logger.SetLogrus()
 
 	// Configure app
-	cfg, err := config.NewConfig("./config/local.yaml")
+	cfg, err := config.NewConfig("./config/docker.yaml")
 	if err != nil {
 		logrus.Fatalf("error initializing config: %s", err.Error())
 	}
