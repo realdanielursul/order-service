@@ -41,9 +41,10 @@ type (
 	}
 
 	Kafka struct {
-		Host  string `yaml:"host"`
-		Port  string `yaml:"port"`
-		Topic string `yaml:"topic"`
+		Host    string `yaml:"host"`
+		Port    string `yaml:"port"`
+		Topic   string `yaml:"topic"`
+		GroupID string `yaml:"group_id"`
 	}
 )
 

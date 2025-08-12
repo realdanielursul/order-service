@@ -1,23 +1,93 @@
-<!-- public/index.html -->
+<!-- web/index.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Order Lookup</title>
+  <title>Поиск заказа</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #1a2980, #26d0ce);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #fff;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(8px);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      text-align: center;
+      width: 350px;
+    }
+    h1 {
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+    input {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin: 0 auto 15px auto;
+      display: block;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    button {
+      background: #ffcc00;
+      color: #000;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      width: 100%;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #ffdd33;
+    }
+    pre {
+      text-align: left;
+      background: rgba(0,0,0,0.4);
+      padding: 15px;
+      border-radius: 6px;
+      max-height: 200px;
+      overflow-y: auto;
+      font-size: 12px;
+      color: #f5f5f5;
+      margin-top: 15px;
+    }
+  </style>
 </head>
 <body>
-  <h1>Поиск заказа</h1>
-  <input type="text" id="orderId" placeholder="Введите Order UID">
-  <button onclick="getOrder()">Найти</button>
-
-  <pre id="result"></pre>
+  <div class="card">
+    <h1>🔍 Поиск заказа</h1>
+    <input type="text" id="orderId" placeholder="Введите Order UID">
+    <button onclick="getOrder()">Найти</button>
+    <pre id="result"></pre>
+  </div>
 
   <script>
     async function getOrder() {
-      const id = document.getElementById('orderId').value;
-      const response = await fetch(`http://localhost:8080/order/${id}`);
-      const data = await response.json();
-      document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+      const id = document.getElementById('orderId').value.trim();
+      if (!id) {
+        document.getElementById('result').textContent = "⚠️ Введите Order UID";
+        return;
+      }
+      try {
+        const response = await fetch(`http://localhost:8080/order/${id}`);
+        const data = await response.json();
+        document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        document.getElementById('result').textContent = "❌ Ошибка запроса: " + err.message;
+      }
     }
   </script>
 </body>

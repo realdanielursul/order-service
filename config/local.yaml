@@ -10,16 +10,17 @@ postgres:
   port: 5432
   username: postgres
   password: postgres
-  database: orders
+  database: order
   ssl_mode: disable
 
 redis:
   host: localhost
   port: 6380
-  password: ""
+  password:
   db: 0
 
 kafka:
   host: localhost
   port: 9092
-  topic: orders
+  topic: order
+  group_id: order-consumer

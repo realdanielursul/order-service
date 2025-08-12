@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: orders
+      POSTGRES_DB: order
     ports:
       - "5432:5432"
     healthcheck:
@@ -20,7 +20,7 @@ services:
 
   migrate:
     image: migrate/migrate
-    command: ["-path", "/migrations", "-database", "postgres://postgres:postgres@postgres:5432/orders?sslmode=disable", "up"]
+    command: ["-path", "/migrations", "-database", "postgres://postgres:postgres@postgres:5432/order?sslmode=disable", "up"]
     volumes:
       - ./migrations:/migrations
     depends_on:
@@ -53,7 +53,7 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_CREATE_TOPICS: "orders:1:1"
+      KAFKA_CREATE_TOPICS: "order:1:1"
 
 volumes:
   pg_data:

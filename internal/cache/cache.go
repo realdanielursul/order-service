@@ -2,7 +2,6 @@ package cache
 
 import (
 	"context"
-	"log"
 	"time"
 
 	"github.com/redis/go-redis/v9"
@@ -15,8 +14,6 @@ type Cache struct {
 }
 
 func NewCache(client *redis.Client) *Cache {
-
-	log.Println(client)
 	return &Cache{client}
 }
 

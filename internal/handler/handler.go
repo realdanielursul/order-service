@@ -24,13 +24,17 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	router.GET("/order/:order_uid", func(c *gin.Context) {
 		orderUID := c.Param("order_uid")
 		if orderUID == "" {
-			// c.AbortWithStatusJSON()
 			c.JSON(http.StatusBadRequest, gin.H{"reason": "empty order_uid param"})
 			return
 		}
 
 		order, err := h.services.GetOrder(c.Request.Context(), orderUID)
 		if err != nil {
+			if err.Error() == "order not found" {
+				c.JSON(http.StatusNotFound, gin.H{"reason": err.Error()})
+				return
+			}
+
 			c.JSON(http.StatusInternalServerError, gin.H{"reason": err.Error()})
 			return
 		}
