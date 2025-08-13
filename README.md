@@ -8,9 +8,9 @@ Demonstrational service built with Go, Kafka, PostgreSQL, and Redis. The service
 
 ## Getting Started
 
-Follow these steps to run the application:
-
 ## TODO: ADD VIDEO
+
+Follow these steps to run the application:
 
 1. **Clone the Repository**:
     ```bash
