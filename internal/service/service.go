@@ -84,3 +84,25 @@ func (s *Service) CreateOrder(ctx context.Context, order *entity.Order) error {
 
 	return nil
 }
+
+func (s *Service) PreloadCache(ctx context.Context) error {
+	orders, err := s.repository.GetAllOrders(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to preload cache: %w", err)
+	}
+
+	for _, order := range orders {
+		data, err := json.Marshal(order)
+		if err != nil {
+			logrus.Warnf("failed to marshal order %q: %v", order.OrderUID, err)
+			continue
+		}
+
+		if err := s.cache.SetData(ctx, order.OrderUID, data); err != nil {
+			logrus.Warnf("failed to cache order %q: %v", order.OrderUID, err)
+		}
+	}
+
+	logrus.Infof("Preloaded %d orders into cache", len(orders))
+	return nil
+}

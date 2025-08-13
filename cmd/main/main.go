@@ -22,7 +22,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// ПОДГРУЖАТЬ КЕШ ПОСЛЕ ПЕРЕЗАГРУЗКИ
+// ADD README + VIDEO
 
 func main() {
 	// Set up logger
@@ -50,6 +50,11 @@ func main() {
 	cache := cache.NewCache(client)
 	repository := repository.NewRepository(db)
 	service := service.NewService(cache, repository)
+
+	// Preload cache
+	if err := service.PreloadCache(context.Background()); err != nil {
+		logrus.Fatalf("cache preload failed: %v", err)
+	}
 
 	// Connect to Kafka
 	reader := kafka.NewKafkaReader(cfg.Kafka)

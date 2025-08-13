@@ -116,5 +116,69 @@ func (r *Repository) GetOrder(ctx context.Context, orderUID string) (*entity.Ord
 		order.Items = append(order.Items, item)
 	}
 
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("rows error: %w", err)
+	}
+
 	return &order, nil
+}
+
+func (r *Repository) GetAllOrders(ctx context.Context) ([]*entity.Order, error) {
+	// set context timeout
+	ctx, cancel := context.WithTimeout(ctx, operationTimeout)
+	defer cancel()
+
+	var orders []*entity.Order
+
+	// select all orders
+	query := `SELECT order_uid, track_number, entry, locale, internal_signature, customer_id, delivery_service, shardkey, sm_id, date_created, oof_shard FROM orders`
+	rows, err := r.QueryxContext(ctx, query)
+	if err != nil {
+		return nil, fmt.Errorf("get all orders: %w", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var order entity.Order
+		if err := rows.StructScan(&order); err != nil {
+			return nil, fmt.Errorf("scan order: %w", err)
+		}
+
+		// select delivery data
+		query = `SELECT name, phone, zip, city, address, region, email FROM delivery WHERE order_uid = $1`
+		if err := r.QueryRowxContext(ctx, query, order.OrderUID).StructScan(&order.Delivery); err != nil {
+			return nil, fmt.Errorf("get delivery: %w", err)
+		}
+
+		// select payment data
+		query = `SELECT transaction, request_id, currency, provider, amount, payment_dt, bank, delivery_cost, goods_total, custom_fee FROM payment WHERE order_uid = $1`
+		if err := r.QueryRowxContext(ctx, query, order.OrderUID).StructScan(&order.Payment); err != nil {
+			return nil, fmt.Errorf("get payment: %w", err)
+		}
+
+		// select items data
+		query = `SELECT chrt_id, track_number, price, rid, name, sale, size, total_price, nm_id, brand, status FROM items WHERE order_uid = $1`
+		rows, err := r.QueryxContext(ctx, query, order.OrderUID)
+		if err != nil {
+			return nil, fmt.Errorf("get items: %w", err)
+		}
+		defer rows.Close()
+
+		for rows.Next() {
+			var item entity.Item
+			if err := rows.StructScan(&item); err != nil {
+				return nil, fmt.Errorf("scan item: %w", err)
+			}
+
+			order.Items = append(order.Items, item)
+		}
+
+		orders = append(orders, &order)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("rows error: %w", err)
+	}
+
+	return orders, nil
 }
