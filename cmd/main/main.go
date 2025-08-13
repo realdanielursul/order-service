@@ -22,8 +22,6 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// ADD README + VIDEO
-
 func main() {
 	// Set up logger
 	logger.SetLogrus()
