@@ -6,9 +6,9 @@ Demonstrational service built with Go, Kafka, PostgreSQL, and Redis. The service
 
 ![Backend Architecture](scheme.png)
 
-## Getting Started
-
 ## TODO: ADD VIDEO
+
+## Getting Started
 
 Follow these steps to run the application:
 
@@ -29,10 +29,17 @@ Follow these steps to run the application:
 
 4. **Run the Application:**
     ```bash
-    docker compose up -d
+    docker-compose up -d
     ```
 
-5. **Access the API:**
+5. **Connect to Kafka producer:**
+    ```bash
+    docker exec -it <container_id> bash
+
+    kafka-console-producer --broker-list kafka:9092 --topic order
+    ```
+
+6. **Access the API:**
 The API will be available at http://localhost:8080.
 
 ## Technologies Used:
