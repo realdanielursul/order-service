@@ -6,6 +6,10 @@ Demonstrational service built with Go, Kafka, PostgreSQL, and Redis. The service
 
 ![Backend Architecture](scheme.png)
 
+## Example Video
+
+You can check out example video at https://disk.yandex.ru/d/bAvi5Uj-LnZDCQ.
+
 ## Getting Started
 
 Follow these steps to run the application:
