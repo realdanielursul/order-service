@@ -34,7 +34,7 @@ Follow these steps to run the application:
     docker-compose up -d
     ```
 
-5. **Connect to Kafka producer:**
+5. **Connect to Kafka Producer:**
     ```bash
     docker exec -it <container_id> bash
 
