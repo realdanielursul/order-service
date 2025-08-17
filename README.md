@@ -2,13 +2,13 @@
 
 Demonstrational service built with Go, Kafka, PostgreSQL, and Redis. The service listens to Kafka for incoming order data, stores it in PostgreSQL, and caches recent orders for faster retrieval. It provides an HTTP API to fetch order details by ID, serving data from the cache or database as needed, and includes a simple web interface for viewing orders. On startup, the service preloads the cache from the database to ensure quick responses immediately after launch.
 
-## Architecture
-
-![Backend Architecture](scheme.png)
-
 ## Example Video
 
 You can check out example video at https://disk.yandex.ru/d/bAvi5Uj-LnZDCQ.
+
+## Architecture
+
+![Backend Architecture](scheme.png)
 
 ## Getting Started
 
